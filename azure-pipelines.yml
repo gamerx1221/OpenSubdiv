@@ -69,19 +69,19 @@ jobs:
 #    displayName: Install OpenSSL
 #    workingDirectory: build\vcpkg
   - script: |
-        .\vcpkg.exe install glfw3 --vcpkg-root ./
+        .\vcpkg.exe install glfw3:x64-windows-static --vcpkg-root ./
         .\vcpkg.exe list
     displayName: Install GLFW
     workingDirectory: build\vcpkg   
   - script: |
-      echo "calling vcvars64.bat"
-      call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       echo "using python3"
       mkdir opensubdiv
       cd opensubdiv
-      cmake -G "Visual Studio 17 2022" -A x64 -D NO_PTEX=1 -D NO_DOC=1 -D NO_OMP=1 -D NO_TBB=1 -D NO_CUDA=1 -D NO_OPENCL=1 -D NO_CLEW=1 -D NO_EXAMPLES=1 -D NO_TUTORIALS=1 -D "GLFW_LOCATION=%HOME%/build/vcpkg/glfw3" -DCMAKE_INSTALL_PREFIX=%HOME%/OSDinst ..
+      cmake -G "Visual Studio 17 2022" -A x64 -D NO_PTEX=1 -D NO_DOC=1 -D NO_OMP=1 -D NO_TBB=1 -D NO_CUDA=1 -D NO_OPENCL=1 -D NO_CLEW=1 -D NO_EXAMPLES=1 -D NO_TUTORIALS=1 -D "GLFW_LOCATION=%HOME%/build/vcpkg/installed/x64-windows-static/" -DCMAKE_INSTALL_PREFIX=%HOME%/OSDinst ..
       cmake --build . --config Release --target install
-     # call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
+#     echo "calling vcvars64.bat"
+#     call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+#     call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
   - task: PublishPipelineArtifact@0
     inputs:
