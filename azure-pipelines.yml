@@ -51,10 +51,10 @@ jobs:
 
 - job: Windows
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-latest'
   steps:
   - script: |
-      call C:\"Program Files (x86)"\"Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat
+      call C:\"Program Files (x86)"\"Microsoft Visual Studio"\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat
       call set PATH=C:/Python27amd64;C:/Python27amd64/Scripts;%PATH%
       call python build_scripts/build_osd.py --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
