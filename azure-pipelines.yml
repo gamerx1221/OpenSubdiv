@@ -54,13 +54,33 @@ jobs:
     vmImage: 'windows-2022'
   steps:
   - script: |
+          MD build
+  - script: |
+        git clone https://github.com/microsoft/vcpkg.git --depth 1
+        displayName: 'Get vcpkg'
+        workingDirectory: build
+  - script: |
+        .\bootstrap-vcpkg.bat
+        displayName: Bootstrap vcpkg
+        workingDirectory: build\vcpkg
+  - script: |
+        .\vcpkg.exe install openssl --vcpkg-root ./
+        .\vcpkg.exe list
+        displayName: Install OpenSSL
+        workingDirectory: build\vcpkg
+  - script: |
+        .\vcpkg.exe install glfw --vcpkg-root ./
+        .\vcpkg.exe list
+        displayName: Install OpenSSL
+        workingDirectory: build\vcpkg   
+  - script: |
       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       call python build_scripts/build_osd.py --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
-    displayName: 'Building OpenSubdiv'
+      displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
       ctest -T test -R "bfr|far"
-    displayName: 'Testing OpenSubdiv'
+      displayName: 'Testing OpenSubdiv'
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: cTest
@@ -69,3 +89,48 @@ jobs:
     inputs:
       artifactName: 'osd-win64'
       targetPath: "D:/OSDinst"
+
+
+#  - job: windows
+#    displayName: 'Build - Windows'
+#    continueOnError: false
+#    pool:
+#      vmImage: 'windows-latest'
+#    workspace:
+#      clean: all
+#    steps:
+#      - script: |
+#          MD build
+#      - script: |
+#          git clone https://github.com/microsoft/vcpkg.git --depth 1
+#        displayName: 'Get vcpkg'
+#        workingDirectory: build
+#      - script: |
+#          .\bootstrap-vcpkg.bat
+#        displayName: Bootstrap vcpkg
+#        workingDirectory: build\vcpkg
+#      - script: |
+#          .\vcpkg.exe install openssl --vcpkg-root ./
+#          .\vcpkg.exe list
+#        displayName: Install OpenSSL
+#        workingDirectory: build\vcpkg
+#      - script: |
+#          git clone https://github.com/oatpp/oatpp
+#          MD oatpp\build
+#        displayName: 'Checkout - oatpp'
+#        workingDirectory: build
+#      - script: |
+#          cmake -DOATPP_BUILD_TESTS=OFF ..
+#          cmake --build . --target INSTALL
+#        displayName: 'Build - oatpp'
+#        workingDirectory: build\oatpp\build
+#      - script: |
+#          set OPENSSL_ROOT_DIR="$BUILD_SOURCESDIRECTORY/build/vcpkg/installed/x86-windows"
+#          cmake -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake ..
+#          cmake --build .
+#        displayName: 'Build Module'
+#        workingDirectory: build
+#      - script: |
+#          module-tests.exe
+#        displayName: 'Test'
+#        workingDirectory: build\test\Debug\
