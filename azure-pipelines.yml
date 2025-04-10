@@ -63,19 +63,19 @@ jobs:
         .\bootstrap-vcpkg.bat
     displayName: Bootstrap vcpkg
     workingDirectory: build\vcpkg
-  - script: |
-        .\vcpkg.exe install openssl --vcpkg-root ./
-        .\vcpkg.exe list
-    displayName: Install OpenSSL
-    workingDirectory: build\vcpkg
+#  - script: |
+#        .\vcpkg.exe install openssl --vcpkg-root ./
+#        .\vcpkg.exe list
+#    displayName: Install OpenSSL
+#    workingDirectory: build\vcpkg
   - script: |
         .\vcpkg.exe install glfw --vcpkg-root ./
         .\vcpkg.exe list
-    displayName: Install OpenSSL
+    displayName: Install GLFW
     workingDirectory: build\vcpkg   
   - script: |
       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      call python build_scripts/build_osd.py --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
+      call python build_scripts/build_osd.py --generator "Visual Studio 17 2022" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
