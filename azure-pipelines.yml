@@ -51,7 +51,7 @@ jobs:
 
 - job: Windows
   pool:
-    vmImage: 'windows-2022'
+    vmImage: 'windows-2019'
   steps:
   - script: |
           MD build
@@ -69,13 +69,13 @@ jobs:
 #    displayName: Install OpenSSL
 #    workingDirectory: build\vcpkg
   - script: |
-        .\vcpkg.exe install glfw --vcpkg-root ./
+        .\vcpkg.exe install glfw3 --vcpkg-root ./
         .\vcpkg.exe list
     displayName: Install GLFW
     workingDirectory: build\vcpkg   
   - script: |
-      call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      call python build_scripts/build_osd.py --generator "Visual Studio 17 2022" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
+      call "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      call python build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
