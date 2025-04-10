@@ -77,7 +77,9 @@ jobs:
       echo "calling vcvars64.bat"
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       echo "using python3"
-      call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
+      cmake -G "Visual Studio 16 2019 Win64" -D NO_PTEX=1 -D NO_DOC=1 -D NO_OMP=1 -D NO_TBB=1 -D NO_CUDA=1 -D NO_OPENCL=1 -D NO_CLEW=1 -D "GLFW_LOCATION=build\vcpkg\glfw3"
+      cmake --build . --config Release --target install
+     # call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
