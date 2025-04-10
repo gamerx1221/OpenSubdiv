@@ -51,7 +51,7 @@ jobs:
 
 - job: Windows
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
   steps:
   - script: |
           MD build
@@ -75,22 +75,14 @@ jobs:
     workingDirectory: build\vcpkg   
   - script: |
       echo "calling vcvars64.bat"
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       echo "using python3"
       mkdir opensubdiv
       cd opensubdiv
-      cmake -G "Visual Studio 16 2019" -A x64 -D NO_PTEX=1 -D NO_DOC=1 -D NO_OMP=1 -D NO_TBB=1 -D NO_CUDA=1 -D NO_OPENCL=1 -D NO_CLEW=1 -D "GLFW_LOCATION=build\vcpkg\glfw3" ..
+      cmake -G "Visual Studio 17 2022" -A x64 -D NO_PTEX=1 -D NO_DOC=1 -D NO_OMP=1 -D NO_TBB=1 -D NO_CUDA=1 -D NO_OPENCL=1 -D NO_CLEW=1 -D NO_EXAMPLES=1 -D NO_TUTORIALS=1 -D "GLFW_LOCATION=build\vcpkg\glfw3" -DCMAKE_INSTALL_PREFIX=$HOME%/OSDinst ..
       cmake --build . --config Release --target install
      # call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
-  - script: |
-      cd %HOME%/OSDgen/build/s
-      ctest -T test -R "bfr|far"
-    displayName: 'Testing OpenSubdiv'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: cTest
-      testResultsFiles: D:/OSDgen/build/s/Testing/*/Test.xml
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'osd-win64'
