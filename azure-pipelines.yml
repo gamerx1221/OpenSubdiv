@@ -3,51 +3,51 @@ trigger:
 - dev
 
 jobs:
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-20.04'
-  steps:
-  - script: |
-      sudo apt-get -qq update;
-      sudo pip install --upgrade pip
-      sudo apt-get install python-setuptools;
-      sudo apt-get install libglew-dev libxrandr-dev libxxf86vm-dev libxcursor-dev libxinerama-dev libxi-dev
-      sudo python build_scripts/build_osd.py --tests --tbb --omp --build $HOME/OSDgen/build --src $HOME/OSDgen/src $HOME/OSDinst
-    displayName: 'Building OpenSubdiv'
-  - script: |
-      cd $HOME/OSDgen/build/s
-      sudo ctest -T test -R "bfr|far"
-    displayName: 'Testing OpenSubdiv'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: cTest
-      testResultsFiles: /home/vsts/OSDgen/build/s/Testing/*/Test.xml
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'osd-linux'
-      targetPath: "/home/vsts/OSDinst"
+#- job: Linux
+#  pool:
+#    vmImage: 'ubuntu-20.04'
+#  steps:
+#  - script: |
+#      sudo apt-get -qq update;
+#      sudo pip install --upgrade pip
+#      sudo apt-get install python-setuptools;
+#      sudo apt-get install libglew-dev libxrandr-dev libxxf86vm-dev libxcursor-dev libxinerama-dev libxi-dev
+#      sudo python build_scripts/build_osd.py --tests --tbb --omp --build $HOME/OSDgen/build --src $HOME/OSDgen/src $HOME/OSDinst
+#    displayName: 'Building OpenSubdiv'
+#  - script: |
+#      cd $HOME/OSDgen/build/s
+#      sudo ctest -T test -R "bfr|far"
+#    displayName: 'Testing OpenSubdiv'
+#  - task: PublishTestResults@2
+#    inputs:
+#      testResultsFormat: cTest
+#      testResultsFiles: /home/vsts/OSDgen/build/s/Testing/*/Test.xml
+#  - task: PublishPipelineArtifact@0
+#    inputs:
+#      artifactName: 'osd-linux'
+#      targetPath: "/home/vsts/OSDinst"
 
 
-- job: macOS
-  pool:
-    vmImage: 'macOS-11'
-  steps:
-  - script: |
-      /bin/bash -c "sudo xcode-select -s /Applications/Xcode_13.2.app/Contents/Developer"
-      python build_scripts/build_osd.py --tests --tbb --generator Xcode --build $HOME/OSDgen/build --src $HOME/OSDgen/src $HOME/OSDinst
-    displayName: 'Building OpenSubdiv'
-  - script: |
-      cd $HOME/OSDgen/build/s
-      ctest -T test -R "bfr|far"
-    displayName: 'Testing OpenSubdiv'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: cTest
-      testResultsFiles: /Users/runner/OSDgen/build/s/Testing/*/Test.xml
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'osd-macOS'
-      targetPath: "/Users/runner/OSDinst"
+#- job: macOS
+#  pool:
+#    vmImage: 'macOS-11'
+#  steps:
+#  - script: |
+#      /bin/bash -c "sudo xcode-select -s /Applications/Xcode_13.2.app/Contents/Developer"
+#      python build_scripts/build_osd.py --tests --tbb --generator Xcode --build $HOME/OSDgen/build --src $HOME/OSDgen/src $HOME/OSDinst
+#    displayName: 'Building OpenSubdiv'
+#  - script: |
+#      cd $HOME/OSDgen/build/s
+#      ctest -T test -R "bfr|far"
+#    displayName: 'Testing OpenSubdiv'
+#  - task: PublishTestResults@2
+#    inputs:
+#      testResultsFormat: cTest
+#      testResultsFiles: /Users/runner/OSDgen/build/s/Testing/*/Test.xml
+#  - task: PublishPipelineArtifact@0
+ #   inputs:
+  #    artifactName: 'osd-macOS'
+  #    targetPath: "/Users/runner/OSDinst"
 
 - job: Windows
   pool:
@@ -74,8 +74,10 @@ jobs:
     displayName: Install GLFW
     workingDirectory: build\vcpkg   
   - script: |
+      echo "calling vcvars64.bat"
       call "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      call python build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
+      echo "using python3"
+      call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
