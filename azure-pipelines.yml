@@ -61,22 +61,22 @@ jobs:
         workingDirectory: build
   - script: |
         .\bootstrap-vcpkg.bat
-        displayName: Bootstrap vcpkg
-        workingDirectory: build\vcpkg
+    displayName: Bootstrap vcpkg
+    workingDirectory: build\vcpkg
   - script: |
         .\vcpkg.exe install openssl --vcpkg-root ./
         .\vcpkg.exe list
-        displayName: Install OpenSSL
-        workingDirectory: build\vcpkg
+    displayName: Install OpenSSL
+    workingDirectory: build\vcpkg
   - script: |
         .\vcpkg.exe install glfw --vcpkg-root ./
         .\vcpkg.exe list
-        displayName: Install OpenSSL
-        workingDirectory: build\vcpkg   
+    displayName: Install OpenSSL
+    workingDirectory: build\vcpkg   
   - script: |
       call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       call python build_scripts/build_osd.py --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
-      displayName: 'Building OpenSubdiv'
+    displayName: 'Building OpenSubdiv'
   - script: |
       cd %HOME%/OSDgen/build/s
       ctest -T test -R "bfr|far"
