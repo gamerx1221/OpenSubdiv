@@ -75,7 +75,7 @@ jobs:
     workingDirectory: build\vcpkg   
   - script: |
       echo "calling vcvars64.bat"
-      call "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       echo "using python3"
       call python3 build_scripts/build_osd.py --generator "Visual Studio 16 2019" --generatorPlatform "x64" --tests --tbb --omp --build %HOME%/OSDgen/build --src %HOME%/OSDgen/src %HOME%/OSDinst
     displayName: 'Building OpenSubdiv'
